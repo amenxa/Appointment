@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apoint-pro", "Apoint-pro.csproj", "{FB80556D-2E5B-4145-AA40-3005411C1703}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB80556D-2E5B-4145-AA40-3005411C1703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB80556D-2E5B-4145-AA40-3005411C1703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB80556D-2E5B-4145-AA40-3005411C1703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB80556D-2E5B-4145-AA40-3005411C1703}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C54F2E4-4004-4761-B0C6-F6DFA5855FF8}
+	EndGlobalSection
+EndGlobal

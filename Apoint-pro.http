@@ -1,0 +1,6 @@
+@Apoint_pro_HostAddress = http://localhost:5286
+
+GET {{Apoint_pro_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
