@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label, select, input, textarea, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        select, input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book an Appointment</h1>
+        <form id="appointmentForm">
+            <label for="doctor">Select a Doctor:</label>
+            <select id="doctor" name="doctor"></select>
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date">
+            <label for="notes">Additional Notes:</label>
+            <textarea id="notes" name="notes" rows="4"></textarea>
+            <button type="submit">Confirm Appointment</button>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "https://localhost:7204/api/appointment/GetAllDoctors",
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem("Auth")
+                },
+                contentType: "application/json",
+                success: function (data) {
+                    var doctors = data;
+                    doctors.forEach(function (doctor) {
+                        $("#doctor").append("<option value='" + doctor.id + "'>" + doctor.user.name + "</option>");
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+            $("#appointmentForm").submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "https://localhost:7204/api/appointment/add",
+                    method: "POST",
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("Auth")
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        DoctorId: $("#doctor").val(),
+                        Date: $("#date").val(),
+                        Notes: $("#notes").val()
+                    }),
+                    success: function (response) {
+                        console.log("Success:", response);
+                        alert("Your appointment has been booked successfully!");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

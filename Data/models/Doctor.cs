@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Apoint_pro.Data.models
 {
@@ -16,9 +17,8 @@ namespace Apoint_pro.Data.models
         public TimeSpan timeFrom { get; set; }
         [Required]
         public TimeSpan timeTo { get; set; }
-
         public virtual User user { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Apointment> apointments { get; set; }
 
 

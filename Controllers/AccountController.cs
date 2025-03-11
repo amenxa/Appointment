@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,11 +19,14 @@ namespace Apoint_pro.Controllers
     {
         private readonly AppDbContext Db;
         private readonly IConfiguration configuration;
+        
         public AccountController(AppDbContext Db, IConfiguration configuration)
         {
             this.configuration = configuration;
             this.Db = Db;
+            
         }
+
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -31,14 +35,15 @@ namespace Apoint_pro.Controllers
         {
             if (ModelState.IsValid)
             {
-               string hashedpass =HashPasswordhelper.HashPassword(user.Password);
+                if(Db.Users.Any(u => u.Email== user.Email)) return BadRequest(new { field = "Email", message = "This Email already exists" });
+                string hashedpass =HashPasswordhelper.HashPassword(user.Password);
                 user.Password = hashedpass;
+
                 User user1 = new User ()
                 {
                     Email = user.Email,
                     Name = user.Name,
-                    password = user.Password,
-                    phone = user.Phone
+                    password = user.Password
                 };
                 await Db.Users.AddAsync(user1);
                 await Db.SaveChangesAsync();
@@ -60,31 +65,16 @@ namespace Apoint_pro.Controllers
                 {
                     if (HashPasswordhelper.VerifyPassword(user.Password, userDb.password))
                     {
-                        List<Claim> claims = new List<Claim>();
-                        Console.WriteLine(userDb.userType==null);
-                        claims.Add(new Claim(ClaimTypes.Role, userDb.userType.descripton));
-                        claims.Add(new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()));
-                        claims.Add(new Claim(ClaimTypes.Email, userDb.Email));
-                        claims.Add(new Claim(ClaimTypes.Name, userDb.Name));
-                        claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
-                        var sc = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                        var token = new JwtSecurityToken(
-                        claims: claims,
-                        issuer: configuration["JWT:issuer"],
-                        audience: configuration["JWT:audience"],
-                        expires: DateTime.Now.AddMinutes(1),
-                        signingCredentials: sc
-                        );
-                        var ftoken = new {token = new JwtSecurityTokenHandler().WriteToken(token) , expiration = token.ValidTo };
-
-                        return Ok(ftoken);
+                        //var token = _tokenService.GenerateToken(user.Email);
+                      //  return Ok(new { Token = token });
+                          var token =  HelperMethods.createToken(userDb,configuration);
+                          return Ok(new { token =token});
                     }
-                    else ModelState.AddModelError("Password", "Invalid password");
+                    else return BadRequest( new { field = "Password", message = "Invalid password" });
                 }
-                else ModelState.AddModelError("Email", $"User with email {user.Email} Not found ");
+                else return BadRequest(new { field = "Email", message = $"User with email {user.Email} Not found " });
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { field = "Model", message = $"ModelState Not VAlid ! " });
         }
             
 
