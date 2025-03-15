@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Apoint-pro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a2ef843472fab4fcf51502575ec0f0f5f4af551")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09af730d4a3af9c0f2d61059cf4cffdab8e63f1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Apoint-pro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Apoint-pro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
